@@ -28,49 +28,77 @@ class Piwik
         $this->site_id = 1;
     }
     
-    function get_actions($period = 'day', $cnt = 10)
+    function actions($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getActions&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
-        $json = file_get_contents($url);
-        $data = json_decode($json, true);
-        return $data;
+        return $this->_get_decoded($url);
     }
     
-    function get_last_visits()
+    // Gets the last 10 visitors
+    function last_visits()
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
-        $json = file_get_contents($url);
-        $data = json_decode($json, true);
+        return $this->_get_decoded($url);
+    }
+    
+	// Gets the last 10 visitors returned in a formatted array
+    function last_visits_parsed()
+    {
+        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
+        $visits = $this->_get_decoded($url);
+        
+        $data = array();
+        foreach($visits as $v)
+        {
+            // Get the last array element which has information of the last page the visitor accessed
+            $cnt = end($v['actionDetails']); 
+            $page_link = $v['actionDetails'][$cnt]['pageUrl'];
+            $page_title = $v['actionDetailsTitle'][$cnt]['pageTitle'];
+            
+            $data[] = array(
+              'time' => date("M j, g:i a", $v['lastActionTimestamp']),
+              'title' => $page_title,
+              'link' => $page_link,
+              'ip_address' => $v['ip'],
+              'provider' => $v['provider'],
+              'country' => $v['country'],
+              'country_icon' => $v['countryFlag'],
+              'os' => $v['operatingSystem'],
+              'os_icon' => $v['operatingSystemIcon'],
+              'browser' => $v['browser'],
+              'browser_icon' => $v['browserIcon']
+            );
+        }
+
         return $data;
     }
     
-    function get_page_titles($period = 'day', $cnt = 10)
+    function page_titles($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Actions.getPageTitles&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
-        $json = file_get_contents($url);
-        $data = json_decode($json, true);
-        return $data;
+        return $this->_get_decoded($url);
     }
 
-    function get_unique_visitors($period = 'day', $cnt = 10)
+    function unique_visitors($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
-        $json = file_get_contents($url);
-        $data = json_decode($json, true);
-        return $data;
+        return $this->_get_decoded($url);
     }
 
-    function get_visits($period = 'day', $cnt = 10)
+    function visits($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getVisits&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
-        $json = file_get_contents($url);
-        $data = json_decode($json, true);
-        return $data;
+        return $this->_get_decoded($url);
     }
 
-    function get_websites($period = 'day', $cnt = 10)
+    function websites($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Referers.getWebsites&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
+        return $this->_get_decoded($url);
+    }
+
+    function _get_decoded($url)
+    {
         $json = file_get_contents($url);
         $data = json_decode($json, true);
         return $data;
