@@ -51,9 +51,19 @@ class Piwik
         foreach($visits as $v)
         {
             // Get the last array element which has information of the last page the visitor accessed
-            $cnt = end($v['actionDetails']); 
+            $cnt = count($v['actionDetails']) - 1; 
             $page_link = $v['actionDetails'][$cnt]['pageUrl'];
             $page_title = $v['actionDetailsTitle'][$cnt]['pageTitle'];
+            
+            // Get just the image names (API returns path to icons in piwik install)
+            $flag = explode('/', $v['countryFlag']);
+            $flag_icon = end($flag);
+            
+            $os = explode('/', $v['operatingSystemIcon']);
+            $os_icon = end($os);
+            
+            $browser = explode('/', $v['browserIcon']);
+            $browser_icon = end($browser);
             
             $data[] = array(
               'time' => date("M j, g:i a", $v['lastActionTimestamp']),
@@ -62,11 +72,11 @@ class Piwik
               'ip_address' => $v['ip'],
               'provider' => $v['provider'],
               'country' => $v['country'],
-              'country_icon' => $v['countryFlag'],
+              'country_icon' => $flag_icon,
               'os' => $v['operatingSystem'],
-              'os_icon' => $v['operatingSystemIcon'],
+              'os_icon' => $os_icon,
               'browser' => $v['browser'],
-              'browser_icon' => $v['browserIcon']
+              'browser_icon' => $browser_icon
             );
         }
 
