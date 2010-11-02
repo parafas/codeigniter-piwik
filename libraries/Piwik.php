@@ -29,14 +29,12 @@ class Piwik
     function __construct()
     {
         $this->_ci =& get_instance();
-        //$this->_ci->load->config('piwik');
+        $this->_ci->load->config('piwik');
         
-        // Example: Define piwik config variables, this will get moved and set in a config file later
-        $this->piwik_url = 'http://stats.website.com';
-        $this->token = '0b3b2sdgsd7e82385avdfgde44dsfgd5g';
-        $this->site_id = 1;
-        // I'm turining geoip on, you will need to remove this if you dont want to use or dont have the GeoLiteCity.dat yet
-        $this->geoip_on = TRUE;
+        $this->piwik_url = $this->_ci->config->item('piwik_url');
+        $this->site_id = $this->_ci->config->item('site_id');
+        $this->token = $this->_ci->config->item('token');
+        $this->geoip_on = $this->_ci->config->item('geoip_on');
     }
     
     function actions($period = 'day', $cnt = 10)
@@ -167,8 +165,6 @@ class Piwik
     }
     
 }
-
-// END Piwik Class
 
 /* End of file Piwik.php */
 /* Location: ./application/libraries/Piwik.php */

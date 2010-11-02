@@ -21,12 +21,8 @@ Helpful Links
 Usage
 -----
 	
-	// Set site specific piwik config vars in lib (this will be moved to a config file shortly)
-	$this->piwik_url = 'http://stats.website.com';
-    $this->token = '0b3b2sdgsd7e82385avdfgde44dsfgd5g';
-    $this->site_id = 1;
-	// Only set this to true if you have downloaded GeoLiteCity.dat and have it in the geoip folder.
-	$this->geoip_on = TRUE;
+	// Set site specific piwik configuration variables in config/piwik.php
+	// If you want to use geoip, set geoip_on = TRUE in the config, download GeoLiteCity.dat, and place it in libraries/geoip
 	
 	// Load Libary
 	$this->load->library('piwik');
@@ -47,5 +43,6 @@ Usage
 To-do
 -----
 
-- Finish documentation for all library functions
-- Move Piwik configuration variables to config/piwik.php
+- Add more library functions for other API methods
+- Finish documentation for all existing library functions
+- Improve the way data is returned in some of the functions
