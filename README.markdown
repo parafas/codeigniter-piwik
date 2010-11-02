@@ -1,7 +1,7 @@
 CodeIgniter-Piwik
 ============
 
-CodeIgniter Library for retrieving stats from Piwik Open Source Analytics.
+CodeIgniter Library for retrieving stats from Piwik Open Source Analytics. Also a helper is included for generating a piwik tracking tag based on the piwik settings defined in the piwik config file.
 
 
 Requirements
@@ -38,6 +38,16 @@ Usage
 
     // Get Last 10 Visitors Formatted (tries to eliminate need from parsing whats returned from the last_visits function)
 	$data['visitors'] = $this->piwik->last_visits_parsed();
+	
+	
+	// Load the helper to use to generate tracking tag
+	$this->load->helper('piwik');
+	
+	// Call the helper function before the closing body tag in your view
+	...
+	<?php echo piwik_tag(); ?>
+	</body>
+	</html>
 
 
 To-do

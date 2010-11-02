@@ -3,6 +3,8 @@
 // Base URL to the Piwik Install
 $config['piwik_url'] = 'http://stats.example.com';
 
+$config['piwik_url_ssl'] = 'https://stats.example.com';
+
 // Piwik Site ID for the website you want to retrieve stats for
 $config['site_id'] = 1;
 
