@@ -90,7 +90,7 @@ class Piwik
                 $geoip = $this->_get_geoip($v['ip']);
                 $city = $geoip['city'];
                 $region = $geoip['region'];
-                $country = $geoip['region'];
+                $country = $geoip['country'];
             }
             
             $data[] = array(
