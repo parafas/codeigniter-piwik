@@ -267,19 +267,19 @@ function _setup_segments($gi){
                 $gi->databaseSegments = GEOIP_STATE_BEGIN_REV0;
             } else if ($gi->databaseType == GEOIP_REGION_EDITION_REV1){
                 $gi->databaseSegments = GEOIP_STATE_BEGIN_REV1;
-	    } else if (($gi->databaseType == GEOIP_CITY_EDITION_REV0)||
+      } else if (($gi->databaseType == GEOIP_CITY_EDITION_REV0)||
                      ($gi->databaseType == GEOIP_CITY_EDITION_REV1) 
                     || ($gi->databaseType == GEOIP_ORG_EDITION)
-		    || ($gi->databaseType == GEOIP_ISP_EDITION)
-		    || ($gi->databaseType == GEOIP_ASNUM_EDITION)){
+        || ($gi->databaseType == GEOIP_ISP_EDITION)
+        || ($gi->databaseType == GEOIP_ASNUM_EDITION)){
                 $gi->databaseSegments = 0;
                 $buf = @shmop_read ($gi->shmid, $offset, SEGMENT_RECORD_LENGTH);
                 for ($j = 0;$j < SEGMENT_RECORD_LENGTH;$j++){
                     $gi->databaseSegments += (ord($buf[$j]) << ($j * 8));
                 }
-	            if (($gi->databaseType == GEOIP_ORG_EDITION)||
-			($gi->databaseType == GEOIP_ISP_EDITION)) {
-	                $gi->record_length = ORG_RECORD_LENGTH;
+              if (($gi->databaseType == GEOIP_ORG_EDITION)||
+      ($gi->databaseType == GEOIP_ISP_EDITION)) {
+                  $gi->record_length = ORG_RECORD_LENGTH;
                 }
             }
             break;
@@ -303,20 +303,20 @@ function _setup_segments($gi){
             $gi->databaseSegments = GEOIP_STATE_BEGIN_REV0;
         }
         else if ($gi->databaseType == GEOIP_REGION_EDITION_REV1){
-	    $gi->databaseSegments = GEOIP_STATE_BEGIN_REV1;
+      $gi->databaseSegments = GEOIP_STATE_BEGIN_REV1;
                 }  else if (($gi->databaseType == GEOIP_CITY_EDITION_REV0) ||
                  ($gi->databaseType == GEOIP_CITY_EDITION_REV1) || 
                  ($gi->databaseType == GEOIP_ORG_EDITION) || 
-		 ($gi->databaseType == GEOIP_ISP_EDITION) || 
+     ($gi->databaseType == GEOIP_ISP_EDITION) || 
                  ($gi->databaseType == GEOIP_ASNUM_EDITION)){
             $gi->databaseSegments = 0;
             $buf = fread($gi->filehandle,SEGMENT_RECORD_LENGTH);
             for ($j = 0;$j < SEGMENT_RECORD_LENGTH;$j++){
             $gi->databaseSegments += (ord($buf[$j]) << ($j * 8));
             }
-	    if ($gi->databaseType == GEOIP_ORG_EDITION ||
-		$gi->databaseType == GEOIP_ISP_EDITION) {
-	    $gi->record_length = ORG_RECORD_LENGTH;
+      if ($gi->databaseType == GEOIP_ORG_EDITION ||
+    $gi->databaseType == GEOIP_ISP_EDITION) {
+      $gi->record_length = ORG_RECORD_LENGTH;
             }
         }
         break;

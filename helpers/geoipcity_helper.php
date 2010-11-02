@@ -30,8 +30,8 @@
 
 define("FULL_RECORD_LENGTH",50);
 
-require_once(APPPATH.'libraries/geoip/geoip.inc');
-require_once(APPPATH.'libraries/geoip/geoipregionvars.php');
+require_once(APPPATH.'helpers/geoip_helper.php');
+require_once(APPPATH.'helpers/geoipregionvars_helper.php');
 
 class geoiprecord {
   var $country_code;

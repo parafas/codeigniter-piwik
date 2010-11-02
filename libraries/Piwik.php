@@ -11,12 +11,6 @@
  * @author        Bryce Johnston bryce@wingdspur.com
  */
 
-// If GeoIP is enabled with maxmind GeoLiteCity.dat and geoip libs are in the libraries folder
-// I've included the maxmind files listed below, but you will need to download GeoLiteCity.dat and place it in the same folder to make it work
-include(APPPATH.'libraries/geoip/geoip.inc');
-include(APPPATH.'libraries/geoip/geoipcity.inc');
-include(APPPATH.'libraries/geoip/geoipregionvars.php');
-
 class Piwik
 {
     private $_ci;
@@ -35,6 +29,15 @@ class Piwik
         $this->site_id = $this->_ci->config->item('site_id');
         $this->token = $this->_ci->config->item('token');
         $this->geoip_on = $this->_ci->config->item('geoip_on');
+		
+		if($this->geoip_on)
+        {
+            // I've included the helpers listed below, but you will need to download GeoLiteCity.dat 
+            // and place it in the same folder to make it work
+            $this->_ci->load->helper('geoip');
+            $this->_ci->load->helper('geoipcity');
+            $this->_ci->load->helper('geoipregionvars');
+        }
     }
     
     function actions($period = 'day', $cnt = 10)
