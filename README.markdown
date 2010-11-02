@@ -9,6 +9,7 @@ Requirements
 
 1. CodeIgniter 1.7.2 - 2.0-dev
 2. Piwik install 
+3. For GeoIP capabilities: MaxMind GeoLiteCity.dat GeoIP database http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 
 
 Usage
@@ -18,6 +19,8 @@ Usage
 	$this->piwik_url = 'http://stats.website.com';
     $this->token = '0b3b2sdgsd7e82385avdfgde44dsfgd5g';
     $this->site_id = 1;
+	// Only set this to true if you have downloaded GeoLiteCity.dat and have it in the geoip folder.
+	$this->geoip_on = TRUE;
 	
 	// Load Libary
 	$this->load->library('piwik');
@@ -40,4 +43,3 @@ To-do
 
 - Finish documentation for all library functions
 - Move Piwik configuration variables to config/piwik.php
-- Implement ability to enable/use geoip to retrieve city, region, and country from IP Addresses 
