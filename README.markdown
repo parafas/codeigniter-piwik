@@ -8,9 +8,14 @@ Requirements
 ------------
 
 1. CodeIgniter 1.7.2 - 2.0-dev
-2. Piwik install 
-3. For GeoIP capabilities: MaxMind GeoLiteCity.dat GeoIP database http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+2. Piwik Install 
+3. For GeoIP capabilities: MaxMind GeoLiteCity 
 
+Links
+-----
+<a href="http://piwik.org/latest.zip">Piwik Download</a>
+<a href="http://dev.piwik.org/trac/wiki/API/Reference">Piwik API Reference</a>
+<a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz">MaxMind GeoLiteCity Database</a>
 
 Usage
 -----
