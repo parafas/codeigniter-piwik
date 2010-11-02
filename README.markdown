@@ -11,11 +11,12 @@ Requirements
 2. Piwik Install 
 3. For GeoIP capabilities: MaxMind GeoLiteCity 
 
-Links
------
-<a href="http://piwik.org/latest.zip">Piwik Download</a>
-<a href="http://dev.piwik.org/trac/wiki/API/Reference">Piwik API Reference</a>
-<a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz">MaxMind GeoLiteCity Database</a>
+Helpful Links
+-------------
+
+- <a href="http://piwik.org/latest.zip">Piwik Download</a>
+- <a href="http://dev.piwik.org/trac/wiki/API/Reference">Piwik API Reference</a>
+- <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz">MaxMind GeoLiteCity Database</a>
 
 Usage
 -----
