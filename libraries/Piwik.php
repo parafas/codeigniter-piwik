@@ -29,11 +29,11 @@ class Piwik
         $this->site_id = $this->_ci->config->item('site_id');
         $this->token = $this->_ci->config->item('token');
         $this->geoip_on = $this->_ci->config->item('geoip_on');
-		
-		if($this->geoip_on)
+        
+        if($this->geoip_on)
         {
             // I've included the helpers listed below, but you will need to download GeoLiteCity.dat 
-            // and place it in the helpers/geoip folder to make it work
+            // and place it in the same folder to make it work
             $this->_ci->load->helper('geoip');
             $this->_ci->load->helper('geoipcity');
             $this->_ci->load->helper('geoipregionvars');
@@ -88,7 +88,7 @@ class Piwik
             $country = "";
             if($this->geoip_on)
             {
-                $geoip = $this->_get_geoip($v['ip']);
+                $geoip = $this->get_geoip($v['ip'], TRUE);
                 $city = $geoip['city'];
                 $region = $geoip['region'];
                 $country = $geoip['country'];
@@ -145,18 +145,27 @@ class Piwik
         $data = json_decode($json, true);
         return $data;
     }
-	
-	// ---- GeoIP functions ------------------------------------------------------------------ //
   
-    function get_geoip($ip_address)
+    // ---- GeoIP functions ------------------------------------------------------------------ //
+    
+    function get_geoip($ip_address, $conn = FALSE)
     {
-        $record = geoip_record_by_addr($this->gi, $ip_address);
-        $geoip = array(
-            'city' => $record->city,
-            'region' => $record->region,
-            'country' => $record->country_code3
-        );
-        return $geoip;
+        if($this->geoip_on)
+        {
+            if($conn == FALSE) { $this->_geoip_open(); }
+            $record = geoip_record_by_addr($this->gi, $ip_address);
+            $geoip = array(
+              'city' => $record->city,
+              'region' => $record->region,
+              'country' => $record->country_code3
+            );
+            if($conn == FALSE) { $this->_geoip_close(); }
+            return $geoip;
+        }
+        else
+        {
+            show_error('You must enable GeoIP in the piwik config file to use get_geoip.');
+        }
     }
     
     function _geoip_open()
