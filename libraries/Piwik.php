@@ -33,7 +33,7 @@ class Piwik
 		if($this->geoip_on)
         {
             // I've included the helpers listed below, but you will need to download GeoLiteCity.dat 
-            // and place it in the same folder to make it work
+            // and place it in the helpers/geoip folder to make it work
             $this->_ci->load->helper('geoip');
             $this->_ci->load->helper('geoipcity');
             $this->_ci->load->helper('geoipregionvars');
@@ -145,8 +145,10 @@ class Piwik
         $data = json_decode($json, true);
         return $data;
     }
+	
+	// ---- GeoIP functions ------------------------------------------------------------------ //
   
-    function _get_geoip($ip_address)
+    function get_geoip($ip_address)
     {
         $record = geoip_record_by_addr($this->gi, $ip_address);
         $geoip = array(
@@ -159,7 +161,7 @@ class Piwik
     
     function _geoip_open()
     {
-        $this->gi = geoip_open(APPPATH.'libraries/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
+        $this->gi = geoip_open(APPPATH.'helpers/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
     }
     
     function _geoip_close()

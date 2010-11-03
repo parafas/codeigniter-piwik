@@ -38,7 +38,9 @@ Usage
 
     // Get Last 10 Visitors Formatted (tries to eliminate need from parsing whats returned from the last_visits function)
 	$data['visitors'] = $this->piwik->last_visits_parsed();
-	
+
+	// If GeoIP enabled, and you want to get geoip information, pass it an IP Address
+	$geoip = $this->piwik->get_geoip('127.0.0.1');
 	
 	// Load the helper to use to generate tracking tag
 	$this->load->helper('piwik');
@@ -54,5 +56,5 @@ To-do
 -----
 
 - Add more library functions for other API methods
-- Finish documentation for all existing library functions
+- Finish documentation for all existing library functions and add user guide
 - Improve the way data is returned in some of the functions
