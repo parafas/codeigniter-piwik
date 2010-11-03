@@ -58,3 +58,4 @@ To-do
 - Add more library functions for other API methods
 - Finish documentation for all existing library functions and add user guide
 - Improve the way data is returned in some of the functions
+- Integrate GeoIP with Google Maps API to build a visitor map
