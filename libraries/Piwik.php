@@ -108,9 +108,13 @@ class Piwik
             if($this->geoip_on)
             {
                 $geoip = $this->get_geoip($v['ip'], TRUE);
-                $city = $geoip['city'];
-                $region = $geoip['region'];
-                $country = $geoip['country'];
+                if(!empty($geoip))
+                {
+                    $city = $geoip['city'];
+                    $region = $geoip['region'];
+                    $country = $geoip['country'];
+                }
+                
             }
             
             $data[] = array(
@@ -225,12 +229,14 @@ class Piwik
         if($this->geoip_on)
         {
             ($conn == FALSE ? $this->_geoip_open() : 0);
+            $geoip = array();
             $record = geoip_record_by_addr($this->gi, $ip_address);
-            $geoip = array(
-              'city' => $record->city,
-              'region' => $record->region,
-              'country' => $record->country_code3
-            );
+            if(!empty($record))
+            {
+                $geoip['city'] = $record->city;
+                $geoip['region'] = $record->region;
+                $geoip['country'] = $record->country_code3;
+            }
             ($conn == FALSE ? $this->_geoip_close() : 0);
             return $geoip;
         }
