@@ -47,7 +47,7 @@ class Piwik
      * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
      * @return  array
      */
-    function actions($period = 'day', $cnt = 10)
+    public function actions($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getActions&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -60,7 +60,7 @@ class Piwik
      * @access  public
      * @return  array
      */
-    function last_visits()
+    public function last_visits()
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -73,7 +73,7 @@ class Piwik
      * @access  public
      * @return  array
      */
-    function last_visits_parsed()
+    public function last_visits_parsed()
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
         $visits = $this->_get_decoded($url);
@@ -143,7 +143,7 @@ class Piwik
      * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
      * @return  array
      */
-    function page_titles($period = 'day', $cnt = 10)
+    public function page_titles($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Actions.getPageTitles&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -158,7 +158,7 @@ class Piwik
      * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
      * @return  array
      */
-    function unique_visitors($period = 'day', $cnt = 10)
+    public function unique_visitors($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -173,7 +173,7 @@ class Piwik
      * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
      * @return  array
      */
-    function visits($period = 'day', $cnt = 10)
+    public function visits($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getVisits&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -188,7 +188,7 @@ class Piwik
      * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
      * @return  array
      */
-    function websites($period = 'day', $cnt = 10)
+    public function websites($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Referers.getWebsites&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
@@ -202,7 +202,7 @@ class Piwik
      * @param   string  $url   URL to Piwik API method returning JSON
      * @return  array
      */
-    function _get_decoded($url)
+    private function _get_decoded($url)
     {
         $json = file_get_contents($url);
         $data = json_decode($json, true);
@@ -220,7 +220,7 @@ class Piwik
      * @param   boolean   $conn           TRUE or FALSE - whether a connection to GeoLiteCity is already open or not
      * @return  array
      */
-    function get_geoip($ip_address, $conn = FALSE)
+    public function get_geoip($ip_address, $conn = FALSE)
     {
         if($this->geoip_on)
         {
@@ -247,7 +247,7 @@ class Piwik
      * @access  private
      * @return  void
      */
-    function _geoip_open()
+    private function _geoip_open()
     {
         $this->gi = geoip_open(APPPATH.'helpers/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
     }
@@ -259,12 +259,13 @@ class Piwik
      * @access  private
      * @return  void
      */
-    function _geoip_close()
+    private function _geoip_close()
     {
         geoip_close($this->gi);
     }
     
 }
+// END Piwik Class
 
 /* End of file Piwik.php */
 /* Location: ./application/libraries/Piwik.php */
