@@ -32,35 +32,54 @@ class Piwik
         
         if($this->geoip_on)
         {
-            // I've included the helpers listed below, but you will need to download GeoLiteCity.dat 
-            // and place it in the same folder to make it work
             $this->_ci->load->helper('geoip');
             $this->_ci->load->helper('geoipcity');
             $this->_ci->load->helper('geoipregionvars');
         }
     }
     
+    /**
+     * actions
+     * Get actions (hits) for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
     function actions($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getActions&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
     
-    // Gets the last 10 visitors
+    /**
+     * last_visits
+     * Get information about last 10 visits (ip, time, country, pages, etc.)
+     *
+     * @access  public
+     * @return  array
+     */
     function last_visits()
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
     
-    // Gets the last 10 visitors returned in a formatted array with GeoIP cabability
+    /**
+     * last_visits_parsed
+     * Get information about last 10 visits (ip, time, country, pages, etc.) in a formatted array with GeoIP information if enabled
+     *
+     * @access  public
+     * @return  array
+     */
     function last_visits_parsed()
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
         $visits = $this->_get_decoded($url);
         
         $data = array();
-        if($this->geoip_on) { $this->_geoip_open(); }
+        ($this->geoip_on ? $this->_geoip_open() : 0);
         foreach($visits as $v)
         {
             // Get the last array element which has information of the last page the visitor accessed
@@ -111,34 +130,78 @@ class Piwik
               'geo_country' => $country
             );
         }
-        if($this->geoip_on) { $this->_geoip_close(); }
+        ($this->geoip_on ? $this->_geoip_close() : 0);
         return $data;
     }
     
+    /**
+     * page_titles
+     * Get page visit information for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
     function page_titles($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Actions.getPageTitles&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
 
+    /**
+     * unique_visitors
+     * Get unique visitors for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
     function unique_visitors($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
 
+    /**
+     * visits
+     * Get all visits for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
     function visits($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getVisits&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
 
+    /**
+     * websites
+     * Get refering websites (traffic sources) for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
     function websites($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=Referers.getWebsites&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
 
+    /**
+     * _get_decoded
+     * Gets and returns json_decoded array from the URL passed
+     *
+     * @access  private
+     * @param   string  $url   URL to Piwik API method returning JSON
+     * @return  array
+     */
     function _get_decoded($url)
     {
         $json = file_get_contents($url);
@@ -146,20 +209,29 @@ class Piwik
         return $data;
     }
   
-    // ---- GeoIP functions ------------------------------------------------------------------ //
+    // ---- GeoIP functions ---------------------------------------------------------------------- //
     
+    /**
+     * get_geoip
+     * Uses GeoLiteCity.dat and geoip helpers to get GeoIP information for the IP address passed
+     *
+     * @access  public
+     * @param   string    $ip_address     IP Address
+     * @param   boolean   $conn           TRUE or FALSE - whether a connection to GeoLiteCity is already open or not
+     * @return  array
+     */
     function get_geoip($ip_address, $conn = FALSE)
     {
         if($this->geoip_on)
         {
-            if($conn == FALSE) { $this->_geoip_open(); }
+            ($conn == FALSE ? $this->_geoip_open() : 0);
             $record = geoip_record_by_addr($this->gi, $ip_address);
             $geoip = array(
               'city' => $record->city,
               'region' => $record->region,
               'country' => $record->country_code3
             );
-            if($conn == FALSE) { $this->_geoip_close(); }
+            ($conn == FALSE ? $this->_geoip_close() : 0);
             return $geoip;
         }
         else
@@ -168,11 +240,25 @@ class Piwik
         }
     }
     
+    /**
+     * _geoip_open
+     * Opens connection to GeoLiteCity.dat
+     *
+     * @access  private
+     * @return  void
+     */
     function _geoip_open()
     {
         $this->gi = geoip_open(APPPATH.'helpers/geoip/GeoLiteCity.dat', GEOIP_STANDARD);
     }
     
+    /**
+     * _geoip_close
+     * Closes connection to GeoLiteCity.dat
+     *
+     * @access  private
+     * @return  void
+     */
     function _geoip_close()
     {
         geoip_close($this->gi);
