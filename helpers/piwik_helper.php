@@ -20,19 +20,23 @@ function piwik_tag()
     $piwik_url = $CI->config->item('piwik_url');
     $piwik_url_ssl = $CI->config->item('piwik_url_ssl');
     $site_id = $CI->config->item('site_id');
+    $tag_on = $CI->config->item('tag_on');
        
-    $tag = '<script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "'.$piwik_url_ssl.'/" : "'.$piwik_url.'/");
-    document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-    </script><script type="text/javascript">
-    try {
-    var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '.$site_id.');
-    piwikTracker.trackPageView();
-    piwikTracker.enableLinkTracking();
-    } catch( err ) {}
-    </script><noscript><p><img src="'.$piwik_url.'/piwik.php?idsite='.$site_id.'" style="border:0" alt="" /></p></noscript>';
-    
-    echo stripslashes($tag);
+    if($tag_on)
+    {
+        $tag = '<script type="text/javascript">
+        var pkBaseURL = (("https:" == document.location.protocol) ? "'.$piwik_url_ssl.'/" : "'.$piwik_url.'/");
+        document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+        </script><script type="text/javascript">
+        try {
+        var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '.$site_id.');
+        piwikTracker.trackPageView();
+        piwikTracker.enableLinkTracking();
+        } catch( err ) {}
+        </script><noscript><p><img src="'.$piwik_url.'/piwik.php?idsite='.$site_id.'" style="border:0" alt="" /></p></noscript>';
+        
+        echo stripslashes($tag);
+    }
 }
 
 ?>

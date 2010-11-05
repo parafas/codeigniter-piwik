@@ -14,3 +14,6 @@ $config['token'] = '0b3b2sdgsd7e82385avdfgde44dsfgd5g';
 
 // To turn geoip on, you will need to set to TRUE  and GeoLiteCity.dat will need to be in helpers/geoip
 $config['geoip_on'] = FALSE;
+
+// Controls whether piwik_tag helper function outputs tracking tag (for production, set to TRUE)
+$config['tag_on'] = FALSE;
