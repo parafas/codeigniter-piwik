@@ -85,6 +85,7 @@ class Piwik
             // Get the last array element which has information of the last page the visitor accessed
             $cnt = count($v['actionDetails']) - 1; 
             $page_link = $v['actionDetails'][$cnt]['pageUrl'];
+            $cnt = count($v['actionDetailsTitle']) - 1; 
             $page_title = "";
             if(array_key_exists($cnt, $v['actionDetailsTitle'])) 
             {
