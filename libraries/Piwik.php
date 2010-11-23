@@ -8,7 +8,8 @@
  * @package       CodeIgniter
  * @subpackage    Libraries
  * @category      Libraries
- * @author        Bryce Johnston bryce@wingdspur.com
+ * @author        Bryce Johnston < bryce@wingdspur.com >
+ * @license       MIT
  */
 
 class Piwik
@@ -50,6 +51,21 @@ class Piwik
     public function actions($period = 'day', $cnt = 10)
     {
         $url = $this->piwik_url.'/index.php?module=API&method=VisitsSummary.getActions&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
+        return $this->_get_decoded($url);
+    }
+    
+    /**
+     * keywords
+     * Get search keywords for the specific time period
+     *
+     * @access  public
+     * @param   string  $period   Time interval ('day', 'month', or 'year')
+     * @param   int     $cnt      Gets the number of $period from the current period to what $cnt is set to (i.e. last 10 days by default) 
+     * @return  array
+     */
+    public function keywords($period = 'day', $cnt = 10)
+    {
+        $url = $this->piwik_url.'/index.php?module=API&method=Referers.getKeywords&idSite='.$this->site_id.'&period='.$period.'&date=last'.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
     
