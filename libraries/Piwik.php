@@ -24,7 +24,7 @@ class Piwik
     function __construct()
     {
         $this->_ci =& get_instance();
-        $this->_ci->load->config('piwik');
+        $this->_ci->load->config('manage/piwik');
         
         $this->piwik_url = $this->_ci->config->item('piwik_url');
         $this->site_id = $this->_ci->config->item('site_id');
@@ -74,11 +74,12 @@ class Piwik
      * Get information about last 10 visits (ip, time, country, pages, etc.)
      *
      * @access  public
+     * @param   int     $cnt      Limit the number of visits returned by $cnt
      * @return  array
      */
-    public function last_visits()
+    public function last_visits($cnt = 10)
     {
-        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
+        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&limit='.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
     
@@ -87,11 +88,12 @@ class Piwik
      * Get information about last 10 visits (ip, time, country, pages, etc.) in a formatted array with GeoIP information if enabled
      *
      * @access  public
+     * @param   int     $cnt      Limit the number of visits returned by $cnt
      * @return  array
      */
-    public function last_visits_parsed()
+    public function last_visits_parsed($cnt = 10)
     {
-        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&format=JSON&token_auth='.$this->token;
+        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&limit='.$cnt.'&format=JSON&token_auth='.$this->token;
         $visits = $this->_get_decoded($url);
         
         $data = array();
