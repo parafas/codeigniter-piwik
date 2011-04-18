@@ -24,7 +24,7 @@ class Piwik
     function __construct()
     {
         $this->_ci =& get_instance();
-        $this->_ci->load->config('manage/piwik');
+        $this->_ci->load->config('piwik');
         
         $this->piwik_url = $this->_ci->config->item('piwik_url');
         $this->site_id = $this->_ci->config->item('site_id');
@@ -79,7 +79,7 @@ class Piwik
      */
     public function last_visits($cnt = 10)
     {
-        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&limit='.$cnt.'&format=JSON&token_auth='.$this->token;
+        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisitsDetails&idSite='.$this->site_id.'&period=day&date=today&filter_limit='.$cnt.'&format=JSON&token_auth='.$this->token;
         return $this->_get_decoded($url);
     }
     
@@ -93,7 +93,7 @@ class Piwik
      */
     public function last_visits_parsed($cnt = 10)
     {
-        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisits&idSite='.$this->site_id.'&limit='.$cnt.'&format=JSON&token_auth='.$this->token;
+        $url = $this->piwik_url.'/index.php?module=API&method=Live.getLastVisitsDetails&idSite='.$this->site_id.'&period=day&date=today&filter_limit='.$cnt.'&format=JSON&token_auth='.$this->token;
         $visits = $this->_get_decoded($url);
         
         $data = array();
@@ -102,13 +102,8 @@ class Piwik
         {
             // Get the last array element which has information of the last page the visitor accessed
             $cnt = count($v['actionDetails']) - 1; 
-            $page_link = $v['actionDetails'][$cnt]['pageUrl'];
-            $cnt = count($v['actionDetailsTitle']) - 1; 
-            $page_title = "";
-            if(array_key_exists($cnt, $v['actionDetailsTitle'])) 
-            {
-                $page_title = $v['actionDetailsTitle'][$cnt]['pageTitle'];
-            }
+            $page_link = $v['actionDetails'][$cnt]['url'];
+            $page_title = $v['actionDetails'][$cnt]['pageTitle'];
             
             // Get just the image names (API returns path to icons in piwik install)
             $flag = explode('/', $v['countryFlag']);
@@ -126,7 +121,7 @@ class Piwik
             $country = "";
             if($this->geoip_on)
             {
-                $geoip = $this->get_geoip($v['ip'], TRUE);
+                $geoip = $this->get_geoip($v['visitIp'], TRUE);
                 if(!empty($geoip))
                 {
                     $city = $geoip['city'];
@@ -140,13 +135,13 @@ class Piwik
               'time' => date("M j, g:i a", $v['lastActionTimestamp']),
               'title' => $page_title,
               'link' => $page_link,
-              'ip_address' => $v['ip'],
+              'ip_address' => $v['visitIp'],
               'provider' => $v['provider'],
               'country' => $v['country'],
               'country_icon' => $flag_icon,
               'os' => $v['operatingSystem'],
               'os_icon' => $os_icon,
-              'browser' => $v['browser'],
+              'browser' => $v['browserName'],
               'browser_icon' => $browser_icon,
               'geo_city' => $city,
               'geo_region' => $region,
