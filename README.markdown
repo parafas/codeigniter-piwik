@@ -7,7 +7,7 @@ CodeIgniter Library for retrieving stats from Piwik Open Source Analytics. Also 
 Requirements
 ------------
 
-1. CodeIgniter 1.7.2 - 2.0-dev
+1. CodeIgniter 1.7.2 - 2.0.2
 2. Piwik Install 
 3. For GeoIP capabilities: MaxMind GeoLiteCity 
 
@@ -47,17 +47,17 @@ Usage
 	// Load Libary
 	$this->load->library('piwik');
 
-    // Get Actions
-	// Get last 10 days
+	// Get Actions for Last 10 Days
     $data['actions'] = $this->piwik->actions('day', 10);
-	// Get last 6 months
+	// Get Actions for Last 6 months
 	$data['actions'] = $this->piwik->actions('month', 6);
 
-    // Get Last 10 Visitors
-	$data['visitors'] = $this->piwik->last_visits();
+    // Get 10 Last Visitors
+	$data['visitors'] = $this->piwik->last_visits(10);
 
-    // Get Last 10 Visitors Formatted (tries to eliminate need from parsing whats returned from the last_visits function)
-	$data['visitors'] = $this->piwik->last_visits_parsed();
+    // Get Last 10 Visitors Formatted 
+    // Eliminates needs from parsing whats returned from the last_visits function, does GeoIP lookup if enabled
+	$data['visitors'] = $this->piwik->last_visits_parsed(10);
 
 	// If GeoIP enabled, and you want to get geoip information, pass it an IP Address
 	$geoip = $this->piwik->get_geoip('127.0.0.1');
